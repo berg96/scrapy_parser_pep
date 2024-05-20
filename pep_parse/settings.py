@@ -6,11 +6,16 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent.parent
+NAME_RESULTS_DIR = 'results'
 
 BOT_NAME = 'pep_parse'
+SPIDERS = 'pep_parse.spiders'
 
-SPIDER_MODULES = ['pep_parse.spiders']
-NEWSPIDER_MODULE = 'pep_parse.spiders'
+SPIDER_MODULES = [SPIDERS]
+NEWSPIDER_MODULE = SPIDERS
 
 
 # Crawl responsibly by identifying yourself(and your website) on the user-agent
@@ -88,7 +93,7 @@ ITEM_PIPELINES = {
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 FEEDS = {
-    'results/pep_%(time)s.csv': {
+    f'{NAME_RESULTS_DIR}/pep_%(time)s.csv': {
         'format': 'csv',
         'fields': ['number', 'name', 'status'],
         'overwrite': True

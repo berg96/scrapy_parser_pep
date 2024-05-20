@@ -5,24 +5,21 @@
 import csv
 import datetime as dt
 from collections import defaultdict
-from pathlib import Path
+
+from pep_parse.settings import BASE_DIR, NAME_RESULTS_DIR
 
 # useful for handling different item types with a single interface
 # from itemadapter import ItemAdapter
 
 DATETIME_FORMAT = '%Y-%m-%d_%H-%M-%S'
-BASE_DIR = Path(__file__).parent.parent
-NAME_RESULTS_DIR = 'results'
 HEADER_PEP_STATUSES = ('Статус', 'Количество')
 FOOTER_PEP_STATUSES = 'Всего'
 
 
-def get_results_dir(base_dir):
-    return base_dir / NAME_RESULTS_DIR
-
-
 class PepParsePipeline:
     def open_spider(self, spider):
+        self.RESULTS_DIR = BASE_DIR / NAME_RESULTS_DIR
+        self.RESULTS_DIR.mkdir(exist_ok=True)
         self.statuses = defaultdict(int)
 
     def process_item(self, item, spider):
@@ -32,11 +29,9 @@ class PepParsePipeline:
     def close_spider(self, spider):
         now_formatted = dt.datetime.now().strftime(DATETIME_FORMAT)
         file_name = f'status_summary_{now_formatted}.csv'
-        results_dir = get_results_dir(BASE_DIR)
-        results_dir.mkdir(exist_ok=True)
-        file_path = results_dir / file_name
+        file_path = self.RESULTS_DIR / file_name
         with open(file_path, 'w', encoding='utf-8') as f:
-            writer = csv.writer(f, dialect=csv.unix_dialect)
+            writer = csv.writer(f, dialect=csv.unix_dialect, quoting=0)
             writer.writerows(
                 [
                     HEADER_PEP_STATUSES,
