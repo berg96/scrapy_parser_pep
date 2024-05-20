@@ -10,12 +10,12 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 NAME_RESULTS_DIR = 'results'
+RESULTS_DIR = BASE_DIR / NAME_RESULTS_DIR
 
 BOT_NAME = 'pep_parse'
-SPIDERS = 'pep_parse.spiders'
 
-SPIDER_MODULES = [SPIDERS]
-NEWSPIDER_MODULE = SPIDERS
+NEWSPIDER_MODULE = 'pep_parse.spiders'
+SPIDER_MODULES = [NEWSPIDER_MODULE]
 
 
 # Crawl responsibly by identifying yourself(and your website) on the user-agent
